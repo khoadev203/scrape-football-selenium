@@ -1,8 +1,34 @@
-bwin,Feyenoord Rotterdam,RKC Waalwijk,1.20,7.25,14.00,20211006221910
-bwin,Go Ahead Eagles,Heracles Almelo,2.87,3.50,2.35,20211006221910
-bwin,SC Heerenveen,Ajax Amsterdam,10.00,6.00,1.27,20211006221910
-bwin,PSV Eindhoven,PEC Zwolle,1.17,7.75,17.00,20211006221910
-bwin,Fortuna Sittard,SC Cambuur,2.45,3.60,2.65,20211006221910
-bwin,AZ Alkmaar,FC Utrecht,2.10,3.50,3.30,20211006221910
-bwin,NEC Nijmegen,Vitesse Arnhem,3.30,3.40,2.15,20211006221911
-bwin,FC Twente Enschede,Willem II Tilburg,1.78,3.80,4.20,20211006221911
+site,team1,team2,result1,resultX,result2,time
+bwin,Feyenoord Rotterdam,RKC Waalwijk,1.20,7.25,14.00,20211007002949
+bwin,Go Ahead Eagles,Heracles Almelo,2.87,3.50,2.35,20211007002949
+bwin,SC Heerenveen,Ajax Amsterdam,10.00,6.00,1.27,20211007002949
+bwin,PSV Eindhoven,PEC Zwolle,1.17,7.75,17.00,20211007002950
+bwin,Fortuna Sittard,SC Cambuur,2.45,3.60,2.65,20211007002950
+bwin,AZ Alkmaar,FC Utrecht,2.10,3.50,3.30,20211007002950
+bwin,NEC Nijmegen,Vitesse Arnhem,3.30,3.40,2.15,20211007002950
+bwin,FC Twente Enschede,Willem II Tilburg,1.78,3.80,4.20,20211007002950
+unibet,Feyenoord,RKC Waalwijk,1.20,7.00,13.00,20211007003048
+unibet,Go Ahead Eagles,Heracles Almelo,2.95,3.50,2.33,20211007003048
+unibet,SC Heerenveen,Ajax,9.00,6.25,1.28,20211007003048
+unibet,Fortuna Sittard,Cambuur Leeuwarden,2.48,3.65,2.65,20211007003048
+unibet,PSV Eindhoven,PEC Zwolle,1.15,8.00,17.00,20211007003048
+unibet,AZ Alkmaar,FC Utrecht,2.17,3.60,3.20,20211007003048
+unibet,NEC Nijmegen,Vitesse,3.30,3.50,2.17,20211007003048
+unibet,Sparta Rotterdam,FC Groningen,2.33,3.40,3.00,20211007003048
+unibet,FC Twente,Willem II,1.86,3.70,4.10,20211007003048
+unibet,Willem II,Fortuna Sittard,1.95,3.60,3.70,20211007003048
+unibet,FC Utrecht,SC Heerenveen,1.65,4.00,4.85,20211007003048
+unibet,PEC Zwolle,Heracles Almelo,2.40,3.45,2.80,20211007003048
+unibet,RKC Waalwijk,Sparta Rotterdam,2.55,3.45,2.65,20211007003048
+unibet,FC Twente,NEC Nijmegen,1.85,3.65,4.05,20211007003048
+unibet,Cambuur Leeuwarden,Feyenoord,4.85,4.00,1.65,20211007003048
+unibet,Vitesse,Go Ahead Eagles,1.40,4.75,7.25,20211007003048
+unibet,Ajax,PSV Eindhoven,1.65,4.00,4.85,20211007003048
+unibet,FC Groningen,AZ Alkmaar,4.05,3.65,1.85,20211007003048
+toto,Feyenoord,RKC Waalwijk,"1,20","7,45","12,50",20211007003058
+toto,Go Ahead Eagles,Heracles Almelo,"3,00","3,45","2,35",20211007003058
+toto,SC Heerenveen,Ajax,"9,80","6,75","1,25",20211007003058
+toto,Fortuna Sittard,SC Cambuur,"2,52","3,60","2,65",20211007003058
+toto,PSV,PEC Zwolle,"1,17","7,75","15,75",20211007003058
+toto,AZ Alkmaar,FC Utrecht,"2,14","3,65","3,25",20211007003058
+toto,NEC,Vitesse,"3,10","3,50","2,25",20211007003058

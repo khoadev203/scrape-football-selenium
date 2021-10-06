@@ -19,7 +19,7 @@ const jsonData = require("./urls.json")
 async function writeToCSV(siteName, team1, team2, result1, result2, resultX) {
   if (!fs.existsSync(finalPathFile))
     writer = csvWriter({
-      headers: ["site", "team1", "team2", "result1", "resultX", "result2","time"]
+      headers: ["site", "team1", "team2", "result1", "resultX", "result2", "time"]
     });
   else
     writer = csvWriter({
@@ -53,14 +53,14 @@ function formatDate(date) {
   var minutes = date.getMinutes();
   var seconds = date.getSeconds();
   var years = date.getFullYear();
-  var months = date.getMonth()+1;
+  var months = date.getMonth() + 1;
   var days = date.getDate();
-  if(months<10)months = '0'+months;
-  if(days<10)days = '0'+days;
-  if(hours<10)hours = '0'+hours;
-  if(minutes<10)minutes = '0'+minutes;
-  if(seconds<10)seconds = '0'+seconds;
-  var strTime = years +''+ months +''+ days +''+ hours + '' + minutes + '' + seconds;
+  if (months < 10) months = '0' + months;
+  if (days < 10) days = '0' + days;
+  if (hours < 10) hours = '0' + hours;
+  if (minutes < 10) minutes = '0' + minutes;
+  if (seconds < 10) seconds = '0' + seconds;
+  var strTime = years + '' + months + '' + days + '' + hours + '' + minutes + '' + seconds;
   return strTime;
 }
 // puppeteer usage as normal
@@ -143,7 +143,7 @@ puppeteer.launch({
       let totoX12 = [];
       try {
         const liElm = await page.$x("//div[@class='event-list__item__content']");
-    console.log(liElm.length)
+        console.log(liElm.length)
         await page.close();
 
         // write into csv
