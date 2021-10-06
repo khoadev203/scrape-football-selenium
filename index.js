@@ -15,10 +15,57 @@ const csvWriter = require('csv-write-stream')
 const finalPathFile = './football.csv';
 // import config
 const jsonData = require("./urls.json")
+// csv fuc
+async function writeToCSV(siteName, team1, team2, result1, result2, resultX) {
+  if (!fs.existsSync(finalPathFile))
+    writer = csvWriter({
+      headers: ["site", "team1", "team2", "result1", "resultX", "result2","time"]
+    });
+  else
+    writer = csvWriter({
+      sendHeaders: false
+    });
 
+  writer.pipe(fs.createWriteStream(finalPathFile, {
+    flags: 'a'
+  }));
+
+  writer.write({
+    site: siteName,
+    team1: team1,
+    team2: team2,
+    result1: result1,
+    resultX: resultX,
+    result2: result2,
+    time: formatDate(new Date()),
+  });
+
+  writer.end();
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve('resolved');
+    }, 100);
+  });
+}
+// time formating
+function formatDate(date) {
+  var hours = date.getHours();
+  var minutes = date.getMinutes();
+  var seconds = date.getSeconds();
+  var years = date.getFullYear();
+  var months = date.getMonth()+1;
+  var days = date.getDate();
+  if(months<10)months = '0'+months;
+  if(days<10)days = '0'+days;
+  if(hours<10)hours = '0'+hours;
+  if(minutes<10)minutes = '0'+minutes;
+  if(seconds<10)seconds = '0'+seconds;
+  var strTime = years +''+ months +''+ days +''+ hours + '' + minutes + '' + seconds;
+  return strTime;
+}
 // puppeteer usage as normal
 puppeteer.launch({
-  headless: false,
+  headless: true,
   args: ['--disable-dev-shm-usage']
 }).then(async browser => {
   for (const [site, links] of Object.entries(jsonData)) {
@@ -26,136 +73,96 @@ puppeteer.launch({
     console.log('links:', links);
     // for (let key in links) {
 
-      // const url = links[key];
-      // console.log('url', url);
+    // const url = links[key];
+    // console.log('url', url);
+    if (site != 'bwin') continue;
 
-      const page = await browser.newPage()
-      // Configure the navigation timeout
-      await page.setDefaultNavigationTimeout(0);
-      await page.goto(links);
-      console.log('goto url')
-      if(site == 'unibet'){
+    const page = await browser.newPage()
+    // Configure the navigation timeout
+    await page.setDefaultNavigationTimeout(0);
+    await page.goto(links);
+    console.log('goto url')
+
+    if (site == 'unibet') {
       try {
-        console.log('in try')
         let cols = await page.$x("//div[@class='fa117']");
-        console.log('in cols')
-        for (let col in cols){
-          console.log('in col')
+        console.log('in cols', cols.length)
+        for (let col in cols) {
+
           let teams = await cols[col].$x("//div[@class='af24c']");
-          for (let team in teams){
+          for (let team in teams) {
             let teamname = await (await teams[team].getProperty('innerText')).jsonValue();
             console.log(teamname)
           }
         }
-        // // find camp url and program title
-        // const h1Tags = await page.$x("//div[@class='af24c']");
-        // let programTitle = '';
-        // let campLink = '';
-        // if (h1Tags[1]) {
-        //   programTitle = await (await h1Tags[1].getProperty('innerText')).jsonValue();
-        //   campLink = await h1Tags[1].$eval('a', a => a.getAttribute('href'));
-        // }
-
-        // // find pictures if exist
-        // const imgs = await page.$$eval('img.img-responsive[src]', imgs => imgs.map(img => img.getAttribute('src')));
-
-        // // find program description
-        // let divs = await page.$x("//div[@class='camp-description']");
-        // let programDesc = '';
-        // if (divs[0])
-        //   programDesc = await (await divs[0].getProperty('innerText')).jsonValue();
-
-        // // find location
-        // const addressTags = await page.$x("//address");
-        // let location = '';
-        // let zipcode = '';
-        // let city = '';
-        // if (addressTags[0]) {
-        //   location = await (await addressTags[0].getProperty('innerText')).jsonValue();
-        //   location = location.slice(0, -11)
-        //   // extract city&zipcode
-        //   let strArr = location.split(",");
-
-        //   let zipcodeArrr = (strArr[1]) ? strArr[1].split(" ") : [''];
-        //   zipcode = (zipcodeArrr[1]) ? zipcodeArrr[1].substring(0, 5) : '';
-
-        //   let cityArrr = (strArr[0]) ? strArr[0].split(" ") : [''];
-        //   city = cityArrr[cityArrr.length - 1];
-        // }
-
-        // // find contact
-        // const contacts = await page.$x("//div[@class='sidebar-contact fix']");
-        // let contact = '';
-        // let programLink = '';
-        // if (contacts[0]) {
-        //   programLink = await contacts[0].$eval('a', a => a.getAttribute('href'));
-        //   // contact = await contacts[0].$eval('p', p => p.textContent);
-        //   pTag = await contacts[0].$x('p');
-        //   contact = await (await pTag[0].getProperty('innerText')).jsonValue();
-        // }
-
-        // // find additional info
-        // const additionalInfos = await page.$x("//div[@class='sidebar-btm fix']");
-        // let infoFor = infoType = infoGeneral = infoFinancial = infoWaterfront = '';
-        // if (additionalInfos[0]) {
-        //   let additioanlInfo = await additionalInfos[0].$x("p");
-        //   if (additioanlInfo[0]) infoFor = await (await additioanlInfo[0].getProperty('innerText')).jsonValue() + ', ';
-        //   if (additioanlInfo[1]) infoType = await (await additioanlInfo[1].getProperty('innerText')).jsonValue() + ', ';
-        //   if (additioanlInfo[4]) infoGeneral = await (await additioanlInfo[4].getProperty('innerText')).jsonValue() + ', ';
-        //   if (additioanlInfo[5]) infoFinancial = await (await additioanlInfo[5].getProperty('innerText')).jsonValue() + ', ';
-        //   if (additioanlInfo[6]) infoWaterfront = await (await additioanlInfo[6].getProperty('innerText')).jsonValue();
-        // }
-
-        // // write into csv
-        // if (!fs.existsSync(finalPathFile))
-        //   writer = csvWriter({
-        //     headers: ["title", "campUrl", "about", "picture", "location", "city", "zipcode", "contact", "siteUrl", "additional"]
-        //   });
-        // else
-        //   writer = csvWriter({
-        //     sendHeaders: false
-        //   });
-
-        // writer.pipe(fs.createWriteStream(finalPathFile, {
-        //   flags: 'a'
-        // }));
-        // writer.write({
-        //   title: programTitle,
-        //   campUrl: baseUrl + campLink,
-        //   about: programDesc,
-        //   picture: JSON.stringify(imgs),
-        //   location: location,
-        //   // state: id.state,
-        //   city: city,
-        //   zipcode: zipcode,
-        //   // contact:contact.replace(/[^a-zA-Z ]/g, ""),
-        //   contact: contact,
-        //   siteUrl: programLink,
-        //   additional: infoFor + infoType + infoGeneral + infoFinancial + infoWaterfront,
-        // });
-        // writer.end();
 
         await page.close();
       } catch (error) {
-        console.log(error,'unibet')
+        console.log(error, 'unibet')
         continue;
-      }}
-      else if (site == 'bwin'){
-        try{
-
-        } catch (error) {
-          console.log(error,'bwin')
-        }
       }
-      else if (site == 'toto'){
-        try{
+    } else if (site == 'bwin') {
+      let bwinTeam = [];
+      let bwinX12 = [];
+      try {
+        let cols = await page.$x("//div[@class='grid-event-wrapper']");
 
-        } catch (error) {
-          console.log(error,'toto')
+        for (let col in cols) {
+          if (col > 0) continue;
+          let teams = await cols[col].$x("//div[@class='participant-container']");
+          for (let team in teams) {
+            let teamname = await (await teams[team].getProperty('innerText')).jsonValue();
+            bwinTeam.push(teamname);
+          }
+
+          let x12s = await cols[col].$x("//div[@class='option-indicator']");
+          for (let x12 in x12s) {
+            let res = await (await x12s[x12].getProperty('innerText')).jsonValue();
+            bwinX12.push(res);
+          }
         }
-      } else{
-        console.log('not in urls')
+
+        await page.close();
+
+        // write into csv
+        for (let i = 0; i < bwinTeam.length / 2; i++) {
+          team1 = bwinTeam[i * 2];
+          team2 = bwinTeam[i * 2 + 1];
+          result1 = bwinX12[i * 3];
+          resultX = bwinX12[i * 3 + 1];
+          result2 = bwinX12[i * 3 + 2];
+
+          let res = await writeToCSV("bwin", team1, team2, result1, result2, resultX);
+
+        }
+      } catch (error) {
+        console.log(error, 'bwin')
       }
+    } else if (site == 'toto') {
+      let totoTeam = [];
+      let totoX12 = [];
+      try {
+        const liElm = await page.$x("//div[@class='event-list__item__content']");
+    console.log(liElm.length)
+        await page.close();
+
+        // write into csv
+        // for (let i = 0; i < totoTeam.length / 2; i++) {
+        //   team1 = totoTeam[i * 2];
+        //   team2 = totoTeam[i * 2 + 1];
+        //   result1 = totoX12[i * 3];
+        //   resultX = totoX12[i * 3 + 1];
+        //   result2 = totoX12[i * 3 + 2];
+
+        //   let res = await writeToCSV("toto", team1, team2, result1, result2, resultX);
+        //   console.log(res, i)
+        // }
+      } catch (error) {
+        console.log(error, 'toto')
+      }
+    } else {
+      console.log('not in urls')
+    }
     // }
   }
 
