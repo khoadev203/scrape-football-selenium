@@ -74,8 +74,9 @@ def query_unibet():
           end_data("unibet", team1, team2, result1, result2, resultX)
 
         
-    except:
+    except Exception as e:
         print(u'error in response')
+        print(e)
         pass
 
 def query_toto():
@@ -87,6 +88,20 @@ def query_toto():
         driver.get(url)
         driver.implicitly_wait(10) # seconds
 
+        # click accept cookie btn
+        cookieBtn = driver.find_element_by_id('accept-cookie-consent')
+        if cookieBtn:
+            cookieBtn.click()
+        # disable right panel
+        rightPanel = driver.find_element_by_class_name('right-panels-group.my-bets--floating')
+        if rightPanel:
+            driver.execute_script("arguments[0].setAttribute('style', 'display:none')", rightPanel)
+        # click see more button
+        moreBtn = driver.find_elements_by_class_name('content-loader__load-more')
+        if len(moreBtn):
+            moreBtn[0].click()
+
+        time.sleep(10)
         lists = driver.find_elements_by_class_name('event-list__item__content')
 
         # lists = WebDriverWait(driver, 10).until(
@@ -119,8 +134,9 @@ def query_toto():
           end_data("toto", team1, team2, result1, result2, resultX)
 
         
-    except:
+    except Exception as e:
         print(u'error in response')
+        print(e)
         pass
 
 
