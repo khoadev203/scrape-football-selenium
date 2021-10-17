@@ -47,6 +47,7 @@ def query_unibet():
     try:
         url = "https://www.unibet.com/betting/sports/filter/football/netherlands/matches"
         driver.get(url)
+        driver.implicitly_wait(10) # seconds
 
         lists = driver.find_elements_by_class_name(
             "fa117")
@@ -72,6 +73,46 @@ def query_unibet():
           result2 = resArr[i * 3 + 2]
           i+=1
           end_data("unibet", team1, team2, result1, result2, resultX)
+
+        
+    except Exception as e:
+        print(u'error in response')
+        print(e)
+        pass
+
+def query_bwin():
+    print('in bwin')
+    teamNames = []
+    resArr = []
+    try:
+        url = "https://sports.bwin.com/en/sports/football-4/betting/netherlands-36/eredivisie-102847"
+        driver.get(url)
+        driver.implicitly_wait(10) # seconds
+        time.sleep(10)
+        lists = driver.find_elements_by_class_name(
+            "grid-event-wrapper")
+        for list in lists:
+
+            teams = list.find_elements_by_class_name("participant-container")
+            for team in teams:
+                teamName = team.get_attribute("innerText")
+                teamNames.append(teamName)
+
+            results = list.find_elements_by_class_name("option-indicator")
+
+            for result in results:
+                res = result.get_attribute("innerText")
+                resArr.append(res)
+
+        i=0
+        while i < len(teamNames) / 2:
+          team1 = teamNames[i * 2]
+          team2 = teamNames[i * 2 + 1]
+          result1 = resArr[i * 3]
+          resultX = resArr[i * 3 + 1]
+          result2 = resArr[i * 3 + 2]
+          i+=1
+          end_data("bwin", team1, team2, result1, result2, resultX)
 
         
     except Exception as e:
@@ -144,6 +185,7 @@ def query_toto():
 def end_data(Name, team1, team2, result1, result2, resultX ):
 
     x = datetime.datetime.now()
+    # print(x.strftime("%G%m%d%H%M%S"))
     with open('football.csv', "a", encoding='utf-8', newline='') as csvfile:
         writer = csv.DictWriter(
             csvfile, fieldnames=FIELD_NAME)
@@ -165,6 +207,8 @@ def main():
         print('unibet done')
         query_toto()
         print('toto done')
+        query_bwin()
+        print('bwin done')
     except HTTPError as error:
         sys.exit(
             'Encountered HTTP error {0} on {1}:\n {2}\nAbort program.'.format(

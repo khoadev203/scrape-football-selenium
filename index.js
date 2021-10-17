@@ -63,11 +63,26 @@ function formatDate(date) {
   var strTime = years + '' + months + '' + days + '' + hours + '' + minutes + '' + seconds;
   return strTime;
 }
+// wait
+function delay(time) {
+  return new Promise(function (resolve) {
+    setTimeout(resolve, time)
+  });
+}
+process.on('unhandledRejection', error => {
+  console.log('error..')
+  // browser.close();
+  console.log('please try again a few minutes later..')
+});
 // puppeteer usage as normal
 puppeteer.launch({
   headless: true,
-  args: ['--disable-dev-shm-usage']
+  args: ['--disable-dev-shm-usage', '--unhandled-rejections=strict']
 }).then(async browser => {
+
+  process.on('unhandledRejection', error => {
+    browser.close();
+  });
   for (const [site, links] of Object.entries(jsonData)) {
     console.log('site:', site);
     console.log('links:', links);
@@ -102,10 +117,13 @@ puppeteer.launch({
         continue;
       }
     } else if (site == 'bwin') {
+      console.log('in bwin')
       let bwinTeam = [];
       let bwinX12 = [];
       try {
+        await delay(2000);
         let cols = await page.$x("//div[@class='grid-event-wrapper']");
+        await delay(2000);
 
         for (let col in cols) {
           if (col > 0) continue;
@@ -121,9 +139,10 @@ puppeteer.launch({
             bwinX12.push(res);
           }
         }
-
+        console.log(bwinTeam)
+        console.log(bwinX12)
         await page.close();
-
+        console.log('page close')
         // write into csv
         for (let i = 0; i < bwinTeam.length / 2; i++) {
           team1 = bwinTeam[i * 2];
@@ -131,7 +150,6 @@ puppeteer.launch({
           result1 = bwinX12[i * 3];
           resultX = bwinX12[i * 3 + 1];
           result2 = bwinX12[i * 3 + 2];
-
           let res = await writeToCSV("bwin", team1, team2, result1, result2, resultX);
 
         }
