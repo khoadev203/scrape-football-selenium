@@ -33,6 +33,7 @@ options = Options()
 options.headless = True
 options.page_load_strategy = 'normal'
 options.add_argument("--start-maximized")
+options.add_argument("window-size=1920,1080")
 driver = webdriver.Chrome(options=options)
 
 
@@ -44,39 +45,42 @@ def query_betsson():
         url = "https://www.betsson.com/en/sportsbook/football/netherlands/netherlands-eredivisie"
         driver.get(url)
         driver.implicitly_wait(10) # seconds
-        time.sleep(10)
-        # print('after sleep')
+
+        # print ("Headless Chrome Initialized")
+        # print(driver.get_window_size())
+        # driver.set_window_size(1920, 1080)
+        # size = driver.get_window_size()
+        # print("Window size: width = {}px, height = {}px".format(size["width"], size["height"]))
+
+        time.sleep(5)
         lists = driver.find_elements_by_class_name(
             "obg-event-row-event-container")
-        print(len(lists))
-        # for list in lists:
+        for list in lists:
 
-        #     teams = list.find_elements_by_class_name("obg-event-info-participant-label")
-        #     for team in teams:
-        #         teamName = team.get_attribute("innerText")
-        #         teamNames.append(teamName)
+            teams = list.find_elements_by_class_name("obg-event-info-participant-label")
+            for team in teams:
+                teamName = team.get_attribute("innerText")
+                teamNames.append(teamName)
 
-        #     results = list.find_elements_by_class_name("obg-numeric-change")
-        #     for result in results:
-        #         res = result.get_attribute("innerText")
-        #         resArr.append(res)
+            results = list.find_elements_by_class_name("obg-numeric-change")
+            for result in results:
+                res = result.get_attribute("innerText")
+                resArr.append(res)
 
-        # i=0
-        # while i < len(teamNames) / 2:
-        #   team1 = teamNames[i * 2]
-        #   team2 = teamNames[i * 2 + 1]
-        #   result1 = resArr[i * 3]
-        #   resultX = resArr[i * 3 + 1]
-        #   result2 = resArr[i * 3 + 2]
-        #   i+=1
-        #   end_data("betsson", team1, team2, result1, result2, resultX)
+        i=0
+        while i < len(teamNames) / 2:
+          team1 = teamNames[i * 2]
+          team2 = teamNames[i * 2 + 1]
+          result1 = resArr[i * 3]
+          resultX = resArr[i * 3 + 1]
+          result2 = resArr[i * 3 + 2]
+          i+=1
+          end_data("betsson", team1, team2, result1, result2, resultX)
 
         driver.execute_script("window.scrollTo(0,700);")
-        time.sleep(10)
+        time.sleep(5)
         lists = driver.find_elements_by_class_name(
             "obg-event-row-event-container")
-        print(len(lists))
-
         
     except Exception as e:
         print(u'error in response')
